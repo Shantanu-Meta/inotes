@@ -1,29 +1,31 @@
-import React, { useContext } from 'react'
-import Noteitem from './Noteitem'
+import React, {useContext} from 'react'
+import Notes from './Notes'
 import noteContext from '../context/notes/noteContext'
 
-
 export default function Home() {
-    let allNotes = useContext(noteContext); 
-    let {notes, setNotes} = allNotes; 
+    let {addNote} = useContext(noteContext); 
+    
+    const passNote = ()=>{
+        let title = document.querySelector("#title");
+        let description = document.querySelector("#description");
+        let newNote = {
+            title: title.value, 
+            description: description.value
+        }
+        addNote(newNote); 
+    }
     return (
         <div className='mt-[75px]'>
             <div className='w-[50%] mx-auto pt-[1rem]'>
-                <h1 for="message" className="block mb-2 text-xl">Add Notes</h1>
-                <textarea id="message" rows="4" className="textarea resize-none block p-2.5 w-full text-sm rounded-lg border border-gray-300 text-xl" placeholder="Add Notes here"></textarea>
-                <button className='p-2 bg-gray-500 rounded-md text-white mt-5 focus:outline-none mr-5' onClick={()=>{
-                    setNotes("value")
-                }}>Add</button>
+                <h1 htmlFor="message" className="block mb-2 text-xl">Add Notes</h1>
+                <label htmlFor="title" className="block mb-2 text-md font-medium">Title</label>
+                <input type="text" id="title" className="border border-gray-500 text-gray-900 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder='Enter title...'/>
+                
+                <label htmlFor="description" className="block mb-2 text-md font-medium mt-5">Description</label>
+                <input type="text" id="description" className="border border-gray-500 text-gray-900 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder='Enter description...' autoComplete='off'/>
+                <button className='rounded-md text-2xl mt-5 focus:outline-none mr-5'  onClick={passNote}><i className="ri-add-circle-fill"></i></button>
             </div>
-
-            <h1 for="message" className="block mb-2 text-xl">Your Notes</h1>
-            <div className='w-[50%] mx-auto pt-[1rem] flex align-center justify-evenly flex-wrap gap-1'>
-                {notes.map((note) => {
-                    console.log(note)
-                    return <Noteitem note={note} key={note.id}/>
-                })}
-            </div>
-
+            <Notes/>
         </div>
     )
 }

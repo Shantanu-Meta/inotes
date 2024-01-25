@@ -36,7 +36,7 @@ router.get('/getnote', fetchUser, async (req, res)=>{
 })
 
 // update a note for a user in DB. 
-router.post('/updatenote/:id', fetchUser, async (req, res)=>{
+router.put('/updatenote/:id', fetchUser, async (req, res)=>{
     try{
         const {title, description, tag} = req.body; 
         const newNote = {}; 
@@ -63,7 +63,7 @@ router.post('/updatenote/:id', fetchUser, async (req, res)=>{
 })
 
 // delete a note for a user from DB. 
-router.post('/deletenote/:id', fetchUser, async (req, res)=>{
+router.delete('/deletenote/:id', fetchUser, async (req, res)=>{
     try{
         
         let fetchedNote = await Note.findById(req.params.id);

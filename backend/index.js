@@ -1,5 +1,6 @@
 const connectWithMongo = require('./db')
 const express = require('express')
+var cors = require('cors')
 
 // create connection with DB, using mongoose. 
 connectWithMongo(); 
@@ -7,7 +8,9 @@ connectWithMongo();
 const app = express();
 const port = 5000
 
-app.use(express.json()); 
+app.use(express.json());
+app.use(cors())
+
 
 // route for authintication. 
 app.use('/api/auth', require('./routes/auth'));
