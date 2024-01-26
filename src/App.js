@@ -5,12 +5,14 @@ import Home from './components/Home';
 import About from './components/About';
 import {Routes, Route } from "react-router-dom";
 import NoteState from "./context/notes/NoteState";
+import Modal from './components/Modal';
 
 
 function App() {
   return (
       <>
       <NoteState>
+        <Modal/>
         <Navbar/>
         <Routes>
           <Route exact path='/' element={<Home/>}/>

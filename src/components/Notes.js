@@ -7,7 +7,6 @@ import noteContext from '../context/notes/noteContext'
 export default function Notes() {
     let allNotes = useContext(noteContext); 
     let {notes, fetchNotes} = allNotes; 
-    console.log(notes)
 
     useEffect(() => {
         fetchNotes(); 

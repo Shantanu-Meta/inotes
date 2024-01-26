@@ -36,13 +36,17 @@ router.get('/getnote', fetchUser, async (req, res)=>{
 })
 
 // update a note for a user in DB. 
-router.put('/updatenote/:id', fetchUser, async (req, res)=>{
+router.put('/updatenote/:id', fetchUser,  [body('title', "Not a valid title").isLength({ min: 3 }), body('description', "description must be minimum 5 chars.").isLength({ min: 5 })], async (req, res)=>{
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()){
+        return res.send({ errors: result.array()});
+    }
+
     try{
         const {title, description, tag} = req.body; 
-        const newNote = {}; 
-        if(title)newNote.title = title
-        if(description)newNote.description = description
-        if(tag)newNote.tag = tag
+        const newNote = {title, description, tag}; 
         
         let fetchedNote = await Note.findById(req.params.id);
         // no such note with this id exist. 

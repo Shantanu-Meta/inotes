@@ -2,11 +2,17 @@ import { useState } from "react"
 import noteContext from "./noteContext"
 
 export default function NoteState(props) {
-      const [notes, setNotes] = useState([]); 
-      const host = "http://localhost:5000"
+      const [notes, setNotes] = useState([])  // To hold all notes fetched from DB. 
+      const [state, setState] = useState(false) // to hold the edit model state. [display / not display]
+      const [prev, setPrev] = useState({});  // to give access the data of NewsItem to Modal component. 
+      const host = "http://localhost:5000" // hosting purpose
       const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVhODAxYzM1ZjU4YTViZWQyZGVlNzkwIn0sImlhdCI6MTcwNTczMjQ4M30.v131LBR6TJUn80McczI-V4hweH7LuP4SbjftcVIbwts"
 
-      // any type api calls(GET, POST, PUT, DEL) can be made from this func.
+      const handleState = ()=>{ // it handles the state of modal of EDIT. 
+        setState(!state); 
+      }
+
+      // any type api calls(GET, POST, PUT, DEL) can be made from this func. =>DONE
       const apiCall =async (url, method, authToken, noteObj)=>{
         const response = await fetch(url, {
           method: method,
@@ -20,7 +26,7 @@ export default function NoteState(props) {
         return json;
       }
 
-      // Fetch notes from DB and display by updating [notes] state => DONE
+      // Fetch notes from DB and display by updating [notes] state => DONE DONE
       const fetchNotes = async ()=>{
         // Fetch from mongoDb via fetchNote api.
         const url = `${host}/api/note/getnote`
@@ -29,14 +35,17 @@ export default function NoteState(props) {
       }
 
       // Add note to DB and display by updating [notes] state. => DONE
-      const addNote = async(newNote)=>{
+      const addNote = async (newNote)=>{
         // Add to mongoDb via addNOte api.
         const url = `${host}/api/note/addnote`
         const newlyAddedNote = await apiCall(url, "POST", authToken, newNote); 
-        setNotes(notes.concat(newlyAddedNote))
+        if(!("errors" in newlyAddedNote))
+          setNotes(notes.concat(newlyAddedNote))
+        else 
+          alert("error")
       }
 
-      // Delete note from DB and display by updating [notes] state. => DONE
+      // Delete note from DB and display by updating [notes] state. => DONE DONE
       const deleteNote = async (noteId)=>{
         // Delete from mongoDb via deleteNote api.
         const url = `${host}/api/note/deletenote/${noteId}`
@@ -49,17 +58,27 @@ export default function NoteState(props) {
       }
 
       // Edit note in DB and display by updating [notes] state.
-      const editNote = (noteId)=>{
+      const editNote = async (newNote)=>{
+        const noteId = prev._id; 
         // edit in mongoDb via editNote api.
-
+        const url = `${host}/api/note/updatenote/${noteId}`
+        const newlyeditedNote = await apiCall(url, "PUT", authToken, newNote); 
         
-        // setNotes(newNotes); 
+        if(!("errors" in newlyeditedNote))
+          for (const i in notes) {
+            if (notes[i]._id === noteId) {
+              notes[i].title = newNote.title; 
+              notes[i].description = newNote.description; 
+              notes[i].tag = newNote.tag; 
+              break; 
+            }
+          }
+        else alert("error")
       }
-
 
     return (
         <>
-            <noteContext.Provider value={{notes,setNotes,fetchNotes, addNote, deleteNote, editNote}}>
+            <noteContext.Provider value={{notes,setNotes,fetchNotes, addNote, deleteNote, editNote, state, handleState, prev, setPrev}}>
                 {props.children}
             </noteContext.Provider>
         </>
