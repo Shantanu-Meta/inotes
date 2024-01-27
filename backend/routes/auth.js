@@ -54,7 +54,6 @@ router.post('/login', [body('email', "Not a valid email").isEmail(), body('passw
     try{
         const user = await User.findOne({email}); 
         if(!user){
-            console.log("NO matched email")
             return res.status(404).json({error:"user not found"});
         }
         const match = await bcrypt.compare(password, user.password);

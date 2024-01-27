@@ -4,9 +4,30 @@ import noteContext from "./noteContext"
 export default function NoteState(props) {
       const [notes, setNotes] = useState([])  // To hold all notes fetched from DB. 
       const [state, setState] = useState(false) // to hold the edit model state. [display / not display]
-      const [prev, setPrev] = useState({});  // to give access the data of NewsItem to Modal component. 
+      const [alert, setAlert] = useState({bgCol:'', msg:''}); 
+      const [active, setActive] = useState(0)
+      const [prev, setPrev] = useState({
+        _id: '', 
+        title: '',
+        description: '', 
+        tag:'', 
+        date:''
+      });  // to give access the data of NewsItem to Modal component. 
       const host = "http://localhost:5000" // hosting purpose
       const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVhODAxYzM1ZjU4YTViZWQyZGVlNzkwIn0sImlhdCI6MTcwNTczMjQ4M30.v131LBR6TJUn80McczI-V4hweH7LuP4SbjftcVIbwts"
+
+      // Alert Handling fnc. 
+      const handleAlert = (bgCol, msg)=>{
+        let newAlert = {bgCol, msg}; 
+        setAlert(newAlert);
+      }
+
+      const handleToggle = ()=>{
+        setActive(!active)
+        setTimeout(()=>{
+          setActive(active);
+        }, 3000)
+      }
 
       const handleState = ()=>{ // it handles the state of modal of EDIT. 
         setState(!state); 
@@ -34,7 +55,7 @@ export default function NoteState(props) {
         setNotes(allNotes); 
       }
 
-      // Add note to DB and display by updating [notes] state. => DONE
+      // Add note to DB and display by updating [notes] state. => DONE DONE
       const addNote = async (newNote)=>{
         // Add to mongoDb via addNOte api.
         const url = `${host}/api/note/addnote`
@@ -42,7 +63,8 @@ export default function NoteState(props) {
         if(!("errors" in newlyAddedNote))
           setNotes(notes.concat(newlyAddedNote))
         else 
-          alert("error")
+          handleAlert("red", "Not a valid Input")
+          handleToggle();
       }
 
       // Delete note from DB and display by updating [notes] state. => DONE DONE
@@ -64,21 +86,28 @@ export default function NoteState(props) {
         const url = `${host}/api/note/updatenote/${noteId}`
         const newlyeditedNote = await apiCall(url, "PUT", authToken, newNote); 
         
-        if(!("errors" in newlyeditedNote))
-          for (const i in notes) {
-            if (notes[i]._id === noteId) {
-              notes[i].title = newNote.title; 
-              notes[i].description = newNote.description; 
-              notes[i].tag = newNote.tag; 
+        if(!("errors" in newlyeditedNote)){
+          const newNote = JSON.parse(JSON.stringify(notes))
+          for (let i=0; i<newNote.length; i++) {
+            if (newNote[i]._id === noteId) {
+              newNote[i].title = newlyeditedNote.title; 
+              newNote[i].description = newlyeditedNote.description; 
+              newNote[i].tag = newlyeditedNote.tag; 
               break; 
             }
           }
-        else alert("error")
+          setNotes(newNote)
+          return 1; 
+        }else {
+          handleAlert("red", "Not a valid Input")
+          handleToggle();
+          return 0; 
+        }
       }
 
     return (
         <>
-            <noteContext.Provider value={{notes,setNotes,fetchNotes, addNote, deleteNote, editNote, state, handleState, prev, setPrev}}>
+            <noteContext.Provider value={{notes,setNotes,fetchNotes, addNote, deleteNote, editNote, state, handleState, prev, setPrev, alert, handleAlert, active, handleToggle}}>
                 {props.children}
             </noteContext.Provider>
         </>

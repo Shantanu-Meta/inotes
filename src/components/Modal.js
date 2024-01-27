@@ -1,28 +1,28 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext} from 'react'
 import noteContext from '../context/notes/noteContext'
 
 export default function Modal() {
-    let {editNote, state, prev, handleState} = useContext(noteContext); 
-    let prevData = {
-        title: prev.title,
-        description: prev.description,
-    }
-    let [data, setData] = useState(prevData); 
+    let {editNote, state, prev, setPrev, handleState, handleAlert, handleToggle} = useContext(noteContext); 
 
-    const passEditedNote = ()=>{
+    const passEditedNote = async ()=>{
         let newTitle = document.querySelector("#etitle");
         let newDescription = document.querySelector("#edescription");
         let newNote = {
             title: newTitle.value, 
             description: newDescription.value
         }
+        const response = await editNote(newNote); 
+        console.log(response)
+        if(response){
+            handleState(); 
+            handleAlert("green", "Note Edited");
+            handleToggle(); 
+        }
         
-        editNote(newNote); 
-        handleState(); 
     }
 
     const handleChange = (e)=>{
-        setData(...data, ...{e.target.getAttribute('name'): e.target.value})
+        setPrev({...prev, [e.target.name]:e.target.value})
     }
 
     return (
@@ -40,10 +40,10 @@ export default function Modal() {
 
                 <div className="p-4 md:p-5 space-y-4">
                     <label htmlFor="etitle" className="block mb-2 text-md font-medium">Title</label>
-                    <input type="text" id="etitle" className="border border-gray-500 text-gray-900 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder='Enter title...' value={prev.title} name={title} onChange={handleChange}/>
+                    <input type="text" id="etitle" className="border border-gray-500 text-gray-900 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder='Enter title...' value={prev.title} name='title'  onChange={handleChange}/>
                     
                     <label htmlFor="edescription" className="block mb-2 text-md font-medium mt-5">Description</label>
-                    <input type="text" id="edescription" className="border border-gray-500 text-gray-900 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder='Enter description...' autoComplete='off' value={prev.description} name={description} onChange={ handleChange } />
+                    <input type="text" id="edescription" className="border border-gray-500 text-gray-900 text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder='Enter description...' autoComplete='off'name='description' value={prev.description}  onChange={ handleChange } />
                 <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={passEditedNote}>Done</button>
                 </div>
             </div>
