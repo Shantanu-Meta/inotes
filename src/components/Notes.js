@@ -1,15 +1,19 @@
 import React, { useContext, useEffect } from 'react'
 import Noteitem from './Noteitem'
 import noteContext from '../context/notes/noteContext'
-
+import { useNavigate } from 'react-router-dom';
 
 // Component: Display all notes from dataBase
 export default function Notes() {
     let allNotes = useContext(noteContext); 
     let {notes, fetchNotes} = allNotes; 
-
-    useEffect(() => {
-        fetchNotes(); 
+    let navigate = useNavigate(); 
+    useEffect(async () => {
+        let resp = 0; 
+        if(localStorage.getItem("auth-token")){
+            resp = await fetchNotes(); 
+        }
+        if(!resp) navigate("login")
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (

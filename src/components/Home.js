@@ -1,9 +1,10 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import Notes from './Notes'
 import noteContext from '../context/notes/noteContext'
 
 export default function Home() {
     let {addNote, handleAlert, handleToggle} = useContext(noteContext); 
+
     const passNote = ()=>{
         // console.log("passNote from HOME")
         let title = document.querySelector("#title");

@@ -14,7 +14,7 @@ export default function NoteState(props) {
         date:''
       });  // to give access the data of NewsItem to Modal component. 
       const host = "http://localhost:5000" // hosting purpose
-      const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVhODAxYzM1ZjU4YTViZWQyZGVlNzkwIn0sImlhdCI6MTcwNTczMjQ4M30.v131LBR6TJUn80McczI-V4hweH7LuP4SbjftcVIbwts"
+      const authToken = localStorage.getItem("auth-token"); 
 
       // Alert Handling fnc. 
       const handleAlert = (bgCol, msg)=>{
@@ -22,6 +22,7 @@ export default function NoteState(props) {
         setAlert(newAlert);
       }
 
+      // alert display timeout
       const handleToggle = ()=>{
         setActive(!active)
         setTimeout(()=>{
@@ -52,7 +53,14 @@ export default function NoteState(props) {
         // Fetch from mongoDb via fetchNote api.
         const url = `${host}/api/note/getnote`
         const allNotes = await apiCall(url,"GET",authToken); 
-        setNotes(allNotes); 
+        if(!("errors" in allNotes)){
+          setNotes(allNotes);
+          return 1; 
+        }else {
+          handleAlert(allNotes.errors)
+          handleToggle();
+          return 0; 
+        } 
       }
 
       // Add note to DB and display by updating [notes] state. => DONE DONE
@@ -105,9 +113,35 @@ export default function NoteState(props) {
         }
       }
 
+      const signUp = async (credintials)=>{
+        const url = `${host}/api/auth/newuser`
+        const response = await apiCall(url, "POST", null, credintials);
+        console.log(response);
+        if(!("errors" in response)){
+          localStorage.setItem("auth-token",response.authtoken)
+          return 1; 
+        }else{
+          handleAlert("yellow", "Not a valid credintial");
+          handleToggle();
+          return 0; 
+        }
+      }
+      const login = async (credintials)=>{
+        const url = `${host}/api/auth/login`
+        const response = await apiCall(url, "POST", null, credintials);
+        console.log(response);
+        if(!("errors" in response)){
+          localStorage.setItem("auth-token",response.authtoken);
+          return 1; 
+        }else{
+          handleAlert("yellow", "Not a valid credintial");
+          handleToggle();
+          return 0; 
+        }
+      }
     return (
         <>
-            <noteContext.Provider value={{notes,setNotes,fetchNotes, addNote, deleteNote, editNote, state, handleState, prev, setPrev, alert, handleAlert, active, handleToggle}}>
+            <noteContext.Provider value={{notes,setNotes,fetchNotes, addNote, deleteNote, editNote, state, handleState, prev, setPrev, alert, handleAlert, active, handleToggle, signUp, login}}>
                 {props.children}
             </noteContext.Provider>
         </>

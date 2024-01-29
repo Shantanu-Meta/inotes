@@ -7,6 +7,7 @@ const fetchUser = require('../middleware/fetchUser')
 const { body, validationResult } = require('express-validator');
 const user = require('../models/User');
 const SECRET_SIGNATURE = 'ABCII78$%'
+
 // Create a POST reqest to the serevr to store to DB. (No auth is required) to api/auth/newuser
 router.post('/newuser', [body('name', "Invalid name").isLength({ min: 3}), body('email', "Must contain @").isEmail(), body('password', "Pass len should be 6").isLength({ min: 5 })], async (req, res)=>{
     //  this method validates the user based on the above mentioned array and the req.body
@@ -37,7 +38,7 @@ router.post('/newuser', [body('name', "Invalid name").isLength({ min: 3}), body(
         var authtoken = jwt.sign(data, SECRET_SIGNATURE);
         res.send({authtoken});
     }catch(err){
-        res.status(500).send("Some internal error occured" + err)
+        res.status(500).send({error:"Internal error, try later" +err})
     }
 
 })
@@ -54,11 +55,11 @@ router.post('/login', [body('email', "Not a valid email").isEmail(), body('passw
     try{
         const user = await User.findOne({email}); 
         if(!user){
-            return res.status(404).json({error:"user not found"});
+            return res.status(404).json({errors:"user not found"});
         }
         const match = await bcrypt.compare(password, user.password);
         if(!match){
-            return res.status(400).json({error: "user not found"});
+            return res.status(400).json({errors: "user not found"});
         }
         const data = {
             user:{
@@ -68,7 +69,7 @@ router.post('/login', [body('email', "Not a valid email").isEmail(), body('passw
         var authtoken = jwt.sign(data, SECRET_SIGNATURE);
         res.send({authtoken});
     }catch(e){
-        return res.status(500).json({error: "Server Error"});
+        return res.status(500).json({errors: "Internal error, try later"});
     }
 })
 
@@ -79,7 +80,7 @@ router.post('/getuser', fetchUser, async (req, res)=>{
         const data = await User.findById(userId).select("-password"); 
         res.send(data); 
     }catch(e){
-        return res.status(500).json({error: " Server Error"});
+        return res.status(500).json({errors: " Internal error, try later"});
     }
 
 })

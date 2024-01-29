@@ -30,7 +30,7 @@ router.get('/getnote', fetchUser, async (req, res)=>{
         const data = await Note.find({userId:req.user.id}); 
         res.json(data); 
     }catch(e){
-        return res.status(500).json({error: " Server Error"});
+        return res.status(500).json({errors: " Server Error"});
     }
 
 })
@@ -51,17 +51,17 @@ router.put('/updatenote/:id', fetchUser,  [body('title', "Not a valid title").is
         let fetchedNote = await Note.findById(req.params.id);
         // no such note with this id exist. 
         if(!fetchedNote){
-            return res.status(404).json({error: "Note note found"});
+            return res.status(404).json({errors: "Note note found"});
         }
 
         // verify authentication. 
         if(fetchedNote.userId.toString() !== req.user.id){
-            return res.status(404).json({error: "User not matched"});
+            return res.status(404).json({errors: "User not matched"});
         }
         fetchedNote =await Note.findByIdAndUpdate(req.params.id, {$set: newNote}, {new:true})
         res.send(fetchedNote);  
     }catch(e){
-        return res.status(500).json({error: " Server Error"});
+        return res.status(500).json({errors: " Server Error"});
     }
 
 })
@@ -73,17 +73,17 @@ router.delete('/deletenote/:id', fetchUser, async (req, res)=>{
         let fetchedNote = await Note.findById(req.params.id);
         // no such note with this id exist. 
         if(!fetchedNote){
-            return res.status(404).json({error: "Note note found"});
+            return res.status(404).json({errors: "Note note found"});
         }
 
         // verify authentication. 
         if(fetchedNote.userId.toString() !== req.user.id){
-            return res.status(404).json({error: "User not matched"});
+            return res.status(404).json({errors: "User not matched"});
         }
         fetchedNote = await Note.findByIdAndDelete(req.params.id)
         res.send(fetchedNote);  
     }catch(e){
-        return res.status(500).json({error: " Server Error"});
+        return res.status(500).json({errors: " Server Error"});
     }
 
 })
