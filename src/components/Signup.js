@@ -9,6 +9,7 @@ export default function Signup() {
 
   const createNewUser = async (e)=>{
     e.preventDefault(); // prevents from reload on sumbmit.
+    console.log(document.querySelector('#user').value)
     const newuser = {
         name: document.querySelector('#user').value,
         email: document.querySelector('#email').value,

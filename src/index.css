@@ -29,3 +29,16 @@ i{
 .alert{
   transition: all 0.2s ease-in-out;
 }
+
+.profile:hover .details{
+ transform: scaleY(105%);
+}
+
+.profile-logo, .details{
+  transition: all 0.2s ease-in;
+}
+
+.details{
+  transform: scaleY(0);
+  transform-origin: top;
+}

@@ -14,8 +14,10 @@ export default function Login() {
         password: document.querySelector('#password').value,
     }
     let response = await login(loginUser);
-    console.log(response);
-    response && navigate('/')
+    if(response){
+        console.log("login done");
+        navigate('/');
+    }
   }
   return (
     <section className="">

@@ -1,13 +1,21 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { Link, useLocation } from 'react-router-dom'
-
+import { useNavigate } from "react-router-dom";
+import noteContext from "../context/notes/noteContext"
 
 export default function Navbar() {
     let linkLoc = useLocation(); 
+    const {setNotes, data} = useContext(noteContext);
+    const navigate = useNavigate();
+    const logOut = ()=>{
+        localStorage.removeItem("auth-token"); 
+        setNotes([]);
+        navigate("/login"); 
+    }
     return (
         <div className="fixed top-0 left-0 w-full z-0">
           <nav className="bg-white border-gray-200 dark:bg-gray-900">
-            <div className="  max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <div className=" max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse" style={linkLoc.pathname==='/' ? {color:"blue"} : {color:"white"}}>
                     <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo"/>
                     <span className="relative self-center text-2xl font-semibold whitespace-nowrap dark:text-white">iNotes
@@ -27,10 +35,24 @@ export default function Navbar() {
                         <Link to="/about" className="block py-2 px-3 bg-blue-700 rounded md:bg-transparent md:p-0 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700" >About</Link>
                         </li>
                     </ul>
-                    <div className='flex items-center justify-evenly ml-2 gap-2'>
+                    {!localStorage.getItem('auth-token') && <div className='flex items-center justify-evenly ml-[1.5rem] gap-2'>
                         <Link to="/signup"><button type="button" className="p-2 bg-blue-700 justify-center text-sm text-white rounded-lg">Sign up</button></Link>
                         <Link to="/login"><button type="button" className="p-2 bg-blue-700 justify-center text-sm text-white rounded-lg">Log in</button></Link>
-                    </div>
+                    </div>}
+                    {localStorage.getItem('auth-token') && <div className='flex items-center justify-evenly ml-[1.5rem] gap-2'>
+                        <div className='profile flex flex-col items-center rounded-full'>
+                           <div className='profile-logo text-white py-2 px-3 cursor-pointer rounded-full border-2 border-white hover:bg-blue-700 hover:border-blue-700'><i class="ri-user-line"></i></div>
+                           <div className='details absolute top-[102%] bg-[#111827] p-2 rounded scale-y-0'>
+                            <ul className='flex flex-col items-center gap-2 text-white font-bold'>
+                                <li className='hover:bg-[#ffffff30] rounded'>{data._id}</li>
+                                <li className='hover:bg-[#ffffff30] rounded'>{data.name}</li>
+                                <li className='hover:bg-[#ffffff30] rounded'>{data.email}</li>
+                            </ul>
+                           </div>
+                        </div>
+
+                        <button type="button" className="p-2 bg-blue-700 justify-center text-sm text-white rounded-lg" onClick={logOut}>Log out</button>
+                    </div>}
                 </div>
             </div>
           </nav>

@@ -6,9 +6,8 @@ export default function Noteitem(props) {
   const {_id, title, description, tag, date} = props.note;
   const handleDeleteNote = ()=>{
     deleteNote(_id); 
-    handleAlert("green", "Note Deleted")
+    handleAlert("red", "Note Deleted")
     handleToggle(); 
-
   }
   const handleEditNote = ()=>{
     setPrev(props.note);
