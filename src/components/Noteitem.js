@@ -1,5 +1,6 @@
 import React , {useContext} from 'react'
 import noteContext from '../context/notes/noteContext'
+import { useSelector } from 'react-redux';
 
 export default function Noteitem(props) {
   let {deleteNote, handleState, setPrev, handleAlert, handleToggle} = useContext(noteContext); 
@@ -13,9 +14,9 @@ export default function Noteitem(props) {
     setPrev(props.note);
     handleState(); 
   }
-
+  const {cardsBg} = useSelector(state => state.theme)
   return (
-    <div className='card max-w-sm bg-white border border-gray-200 rounded-lg shadow relative p-2'>
+    <div className='card max-w-sm rounded-lg shadow-2 shadow-2xl relative p-2' style={{backgroundColor: cardsBg}}>
         <h1 className='title mb-2 text-xl font-bold tracking-tight'>{title}</h1>
         <p className='desc mb-2 font-normal overflow-hidden text-gray-400'>{description}</p>
         <div className='w-full flex align-center justify-between'>

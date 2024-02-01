@@ -1,8 +1,11 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 
 export default function About() {
+    const {bg, text} = useSelector(state => state.theme); 
+
     return (
-        <section className="pb-12 pt-20 lg:pb-[90px] lg:pt-[120px]">
+        <section className="pb-12 pt-20 lg:pb-[90px] lg:pt-[120px]" style={{backgroundColor: bg, color:text}}>
           <div className="container mx-auto">
             <div className="-mx-4 flex flex-wrap">
               <div className="w-full px-4">
@@ -50,14 +53,15 @@ export default function About() {
 }
 
 const ServiceCard = ({title, details }) => {
+  const {cardsBg} = useSelector(state => state.theme)
   return (
     <>
       <div className="w-full px-4 md:w-1/2 lg:w-1/3">
-        <div className="mb-9 rounded-[20px] p-10 shadow-2 shadow-lg md:px-7 xl:px-10">
-          <h4 className="mb-[14px] text-2xl font-semibold text-[#111027]">
+        <div className="mb-9 rounded-[20px] p-10 shadow-2 shadow-lg md:px-7 xl:px-10" style={{backgroundColor: cardsBg}}>
+          <h4 className="mb-[14px] text-2xl font-semibold">
             {title}
           </h4>
-          <p className="text-body-color dark:text-dark-6">{details}</p>
+          <p className="text-body-color">{details}</p>
         </div>
       </div>
     </>
