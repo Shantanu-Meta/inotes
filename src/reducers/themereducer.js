@@ -14,7 +14,7 @@ const themeReducer = (state = theme, action)=>{
             return {...state, text:"whitesmoke", bg:"#01142d", buttons:"#05c3ff", navbar:"#001b3e", cardsBg:"#00adff12", isDark:1}; 
         }
         case "LIGHT":{
-            return {...state, text:"001270", bg:"white", buttons:"#436dff", navbar:"#edf0ff", cardsBg:"white", isDark:0}; 
+            return {...state, text:"#001270", bg:"white", buttons:"#436dff", navbar:"#edf0ff", cardsBg:"white", isDark:0}; 
         }
         default: {return state;}
     }

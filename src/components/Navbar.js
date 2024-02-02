@@ -21,7 +21,8 @@ export default function Navbar() {
         <div className="fixed top-0 left-0 w-full z-0" style={{backgroundColor:navbar, color:text}}>
           <nav className="border-gray-200">
             <div className=" max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse" style={linkLoc.pathname==='/' ? {color:"blue"} : {color:"black"}}>
+                <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse" style={{color : isDark ? "white" : text}}>
+
                     <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo"/>
                     <span className="relative self-center text-2xl font-semibold whitespace-nowrap">iNotes
                     <span className='absolute bottom-[-50%] left-0 text-sm ml-0'>By-Shantanu</span></span>
@@ -34,10 +35,10 @@ export default function Navbar() {
                 </button>
                 <div className="flex items-center justify-between w-full  md:w-auto" id="navbar-default">
                     <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0">
-                        <li style={linkLoc.pathname==='/' ? {color:"blue"} : {color:"black"}}>
-                        <Link to="/" className="block py-2 px-3 bg-blue-700 rounded md:bg-transparent md:p-0 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700" >Home</Link>
+                        <li style={linkLoc.pathname==='/' ? {color:buttons} : (linkLoc.pathname==='/login' || linkLoc.pathname==='/signup') ? {display: 'none'} : {display:"block", color:isDark ? "white" : "black"}}>
+                        <Link to="/" className="block py-2 px-3 bg-blue-700 rounded md:bg-transparent md:p-0 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">Home</Link>
                         </li>
-                        <li style={linkLoc.pathname==='/about' ? {color:"blue"} : {color:"black"}}>
+                        <li style={linkLoc.pathname==='/about' ? {color:buttons} : {color:isDark ? "white" : "black"}}>
                         <Link to="/about" className="block py-2 px-3 bg-blue-700 rounded md:bg-transparent md:p-0 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700" >About</Link>
                         </li>
                     </ul>
