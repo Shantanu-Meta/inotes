@@ -13,6 +13,7 @@ export default function Notes() {
             fetchNotes(); 
             fetchUserProfile(); 
         }else{
+            console.log("ok")
             navigate("/login");
         } 
     }, []); // eslint-disable-line react-hooks/exhaustive-deps

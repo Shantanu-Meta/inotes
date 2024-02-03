@@ -7,7 +7,7 @@ export default function About() {
     return (
         <section className="pb-12 pt-20 lg:pb-[90px] lg:pt-[120px]" style={{backgroundColor: bg, color:text}}>
           <div className="container mx-auto">
-            <div className="-mx-4 flex flex-wrap">
+            <div className="flex flex-wrap">
               <div className="w-full px-4">
                 <div className="mx-auto mb-12 max-w-[510px] text-center lg:mb-20">
                   <h2 className="mb-3 text-3xl font-bold leading-[1.2] sm:text-4xl md:text-[40px]">
@@ -20,7 +20,7 @@ export default function About() {
               </div>
             </div>
     
-            <div className="-mx-4 flex flex-wrap">
+            <div className="flex flex-wrap">
               <ServiceCard
                 title="Organized DataBase"
                 details="We dejoy working with discerning clients, people for whom qualuty, service, integrity & aesthetics."

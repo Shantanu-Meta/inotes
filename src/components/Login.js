@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export default function Login() {
+    console.log("first")
     const {login} = useContext(noteContext)
     const navigate = useNavigate();
     const {text,bg,buttons,isDark}  = useSelector(state => state.theme)
@@ -23,7 +24,7 @@ export default function Login() {
   }
   return (
     <section className={`w-full h-full bg-[${bg}]`}>
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div className="w-full h-full flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className={`w-full rounded-lg  md:mt-0 sm:max-w-md xl:p-0 shadow-2 shadow-2xl`} style={{backgroundColor: isDark ? "#0f2a4f7d" : "white", color: text}}>
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
